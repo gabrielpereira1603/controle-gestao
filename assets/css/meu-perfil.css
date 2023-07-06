@@ -1,0 +1,52 @@
+/*fonte titulo */@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap');
+
+.main {
+    margin-left: 65px;
+}
+
+.title{
+    text-align: start;
+    margin: 50px;
+}
+
+.title h1 {
+    font-family: 'Montserrat', sans-serif;/*fonte titulo */
+    font-weight: 400;
+}
+
+.dados-usuario {
+    font-family: 'Montserrat', sans-serif;/*fonte titulo */
+    margin: 10px;
+}
+
+.dados-usuario hr {
+    border-top: blue solid 2px;
+}
+
+.profile-picture {
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.profile-picture img {
+    width: 200px; /* Ajuste o valor conforme necessário */
+    height: 200px; /* Ajuste o valor conforme necessário */
+}
+
+.edit-icon {
+    position: absolute;
+    display: none;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.profile-picture:hover .edit-icon {
+    display: block;
+}
+
+.edit-icon i {
+    color: white;
+}

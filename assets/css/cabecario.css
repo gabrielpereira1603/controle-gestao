@@ -1,0 +1,169 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    transition: width 0.3s;
+    background-color: #333;
+    color: #fff;
+    overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 9999;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 50px;
+}
+
+.sidebar li {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: padding 0.3s;
+    color: white;
+    padding-left: 17px
+}
+
+.sidebar-link i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.sidebar-link:hover {
+    background-color: #555;
+}
+
+.sidebar-link .sidebar-text {
+    display: none;
+    margin-left: 10px;
+}
+
+.sidebar:hover {
+    width: 250px;
+    /* Largura expandida */
+}
+
+.sidebar:hover .sidebar-link {
+    padding: 10px 40px;
+    /* Espaçamento expandido */
+}
+
+.sidebar:hover .sidebar-link .sidebar-text {
+    display: inline-block;
+    /* Exibir textos */
+}
+
+.sidebar:hover .user-profile .user-details {
+    display: inline-block;
+    /* Exibir textos */
+}
+
+/* Para ocultar os elementos quando a sidebar estiver fechada */
+.sidebar-closed .user-profile,
+.sidebar-closed .user-details,
+.sidebar-closed .logo-text {
+    display: none;
+}
+
+/* Para exibir os elementos quando a sidebar estiver aberta */
+.sidebar:hover .user-profile,
+.sidebar:hover .user-details,
+.sidebar:hover .logo-text {
+    display: flex;
+}
+
+.sidebar:hover .setting-user {
+    background-color: #555;
+    /* colocar cor de fundo quando abre */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    color: #fff;
+    margin-top: 30px;
+}
+
+.logo-text {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.logo-text i {
+    margin-right: 5px;
+}
+
+.bi-list {
+    font-size: 24px;
+}
+
+.setting-user {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+    color: #fff;
+    justify-content: space-around;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.user-details p {
+    width: 100%;
+    font-size: 15px;
+    margin: 1px 0;
+    /* Ajuste o valor da margem conforme necessário */
+}
+
+.user-profile img {
+    width: 50px;
+    height: 60px;
+    border-radius: 10px;
+}
+
+.setting-user i {
+    margin-right: 5px;
+}
+
+#logout {
+    border: none;
+    background-color: #555;
+    padding: 8px;
+    font-size: 24px;
+    border-radius: 5px;
+    color: white;
+}
+
+#logout i {
+    margin-left: 5px;
+}
+
+.current-page {
+    background-color: #555;
+}
+
+@media screen and (max-width: 720px) {
+
+}
