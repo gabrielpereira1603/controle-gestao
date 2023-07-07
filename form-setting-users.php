@@ -2,6 +2,23 @@
 session_start();
 include("conexao.php");
 
+if (isset($_POST['alterar-cargo'])) {
+    $userId = $_POST['codusuario'];
+    $newCargo = $_POST['codcargo'];
+
+    // Atualize o cargo do usuário no banco de dados
+    $sql = "UPDATE usuario SET codcargo = ? WHERE codusuario = ?";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("ii", $newCargo, $userId);
+    $stmt->execute();
+    $stmt->close();
+
+    $_SESSION['success_message'] = 'Cargo alterado com sucesso!';
+    // Redirecione de volta para a página do formulário com uma mensagem de sucesso, se desejar
+    header("Location: setting-users.php");
+    exit;
+}
+
 if (isset($_POST['criar-usuario'])) {
     $newUsername = $_POST["login"];
     $newPassword = $_POST["senha"];
@@ -68,4 +85,5 @@ if (isset($_POST['criar-usuario'])) {
 }
 
 $conexao->close();
+
 ?>

@@ -17,3 +17,56 @@
 .criar-user {
     margin: 50px
 }
+
+.gerenciar-cargo {
+    display: flex;
+    flex-direction: row;
+    font-family: 'Montserrat', sans-serif;/*fonte titulo */
+}
+
+.gerenciar-cargo form {
+    width: 52%;
+    margin: 50px;
+}
+
+.gerenciar-cargo label {
+    margin-top: 10px;
+}
+
+.info-cargo {
+    width: 48%;
+    margin: 50px;
+}
+
+.text-info {
+    margin-top: 30px;
+}
+
+.text-info legend {
+    color: black;
+}
+
+.text-info p {
+    color: black;
+}
+
+@media screen and (max-width: 720px) {
+    body {
+        overflow-x: hidden;
+    }
+    .gerenciar-cargo {
+        display: flex;
+        flex-direction: column-reverse;
+        font-family: 'Montserrat', sans-serif;/*fonte titulo */
+    }
+    
+    .gerenciar-cargo form {
+        width: 70%;
+    }
+
+    .info-cargo {
+        text-align: center;
+        width: 70%;
+        margin: 50px;
+    }
+}

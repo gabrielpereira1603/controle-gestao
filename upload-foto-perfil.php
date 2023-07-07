@@ -2,6 +2,23 @@
 session_start();
 include("conexao.php");
 
+if (isset($_POST['excluir-foto'])) {
+    // Obtém o ID do usuário logado (você pode adaptar essa parte conforme a sua lógica de autenticação)
+    $userId = $_SESSION['codusuario'];
+
+    // Atualiza a coluna 'foto_perfil' na tabela 'usuario' com NULL para excluir a foto
+    $sql = "UPDATE usuario SET foto_perfil = NULL WHERE codusuario = ?";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $stmt->close();
+
+    $_SESSION['success_message'] = 'Foto de perfil excluída com sucesso!';
+    // Redireciona de volta para a página onde o formulário foi submetido
+    header('Location: meu-perfil.php');
+    exit;
+}
+
 // Verifica se foi enviado um arquivo
 if(isset($_FILES['foto_perfil'])) {
     $file = $_FILES['foto_perfil'];
@@ -90,6 +107,7 @@ if (isset($_POST['alterar-usuario'])) {
     } else {
         $_SESSION['error_message'] = 'Nenhum campo preenchido para atualização.';
     }
+    
 }
 
 // Redireciona de volta para a página onde o formulário foi submetido

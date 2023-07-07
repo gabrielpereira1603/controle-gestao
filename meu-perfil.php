@@ -37,7 +37,7 @@ include("conexao.php");
     <link rel="icon" href="assets/img/fiveicon.png" type="image/png">
     <title>Somos Dev's</title>
 </head>
-<body style="background-color: #ffff;">
+<body style="background-color: #e2e8f0;">
     <?php
         include("cabecario.php");
     ?>
@@ -86,7 +86,7 @@ include("conexao.php");
                         <p><strong>Cargo: </strong><?php echo $nomeCargo; ?></p>
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-danger" type="button" name="excluir-foto">Excluir Foto</button>
+                        <button class="btn btn-danger" type="submit" name="excluir-foto">Excluir Foto</button>
                     </div>
                 </div>
 
@@ -152,28 +152,39 @@ include("conexao.php");
 
                     <div class="row">
                         <?php
-                            // Consulta para obter os cargos da tabela 'cargo'
-                            $sql = "SELECT codcargo, nomecargo FROM cargo";
-                            $resultado = $conexao->query($sql);
+                            // Verifique se há um usuário logado na sessão
+                            if (isset($_SESSION['codusuario'])) {
+                                $userId = $_SESSION['codusuario'];
 
-                            // Verifique se há registros retornados
-                            if ($resultado->num_rows > 0) {
-                                echo '<div class="col-md-6">';
-                                echo '<div class="mb-3">';
-                                echo '<label for="cargo" class="form-label">Cargo:</label>';
-                                echo '<select class="form-select" name="codcargo" aria-label="Default select example" disabled>';
-                                // Itere sobre os registros e crie as opções no select
-                                while ($row = $resultado->fetch_assoc()) {
-                                    $codcargo = $row["codcargo"];
-                                    $nomecargo = $row["nomecargo"];
-                                    echo "<option value='$codcargo'>$nomecargo</option>";
+                                // Consulta para obter o cargo do usuário logado
+                                $sql = "SELECT cargo.codcargo, cargo.nomecargo FROM usuario INNER JOIN cargo ON usuario.codcargo = cargo.codcargo WHERE usuario.codusuario = ?";
+                                $stmt = $conexao->prepare($sql);
+                                $stmt->bind_param("i", $userId);
+                                $stmt->execute();
+                                $resultado = $stmt->get_result();
+                                $stmt->close();
+
+                                // Verifique se há registros retornados
+                                if ($resultado->num_rows > 0) {
+                                    echo '<div class="col-md-6">';
+                                    echo '<div class="mb-3">';
+                                    echo '<label for="cargo" class="form-label">Cargo:</label>';
+                                    echo '<select class="form-select" name="codcargo" aria-label="Default select example" disabled>';
+                                    
+                                    // Itere sobre os registros e crie as opções no select
+                                    while ($row = $resultado->fetch_assoc()) {
+                                        $codcargo = $row["codcargo"];
+                                        $nomecargo = $row["nomecargo"];
+                                        echo "<option value='$codcargo'>$nomecargo</option>";
+                                    }
+
+                                    echo '</select>';
+                                    echo '</div>';
+                                    echo '</div>';
                                 }
-
-                                echo '</select>';
-                                echo '</div>';
-                                echo '</div>';
                             }
                         ?>
+
                         <div class="col-md-6" style="margin-top:33px;">
                             <div class="mb-3">
                                 <div class="d-grid mx-auto">
@@ -187,6 +198,7 @@ include("conexao.php");
         </div>
 
     </section>
+    
     <script>
         document.getElementById('profile-picture').addEventListener('click', function() {
             // Abre o explorador de arquivos quando o usuário clica na foto de perfil

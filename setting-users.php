@@ -27,6 +27,26 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 $_SESSION['last_activity'] = time();
 
 include("conexao.php");
+
+// Obtém o ID do usuário logado (você pode adaptar essa parte conforme a sua lógica de autenticação)
+$userId = $_SESSION['codusuario'];
+
+// Consulta o cargo do usuário logado
+$sql = "SELECT codcargo FROM usuario WHERE codusuario = ?";
+$stmt = $conexao->prepare($sql);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$stmt->bind_result($codCargo);
+$stmt->fetch();
+$stmt->close();
+
+// Verifica se o usuário possui o cargo 3
+if ($codCargo != 3) {
+    $_SESSION['error_message'] = 'Você não tem permissão para entrar!';
+    // Redireciona o usuário de volta para a página de login
+    header("Location: home.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +57,7 @@ include("conexao.php");
         <link rel="icon" href="assets/img/fiveicon.png" type="image/png">
         <title>Somos Dev's</title>
     </head>
-    <body style="background-color: #e4e3e3;">
+    <body style="background-color: #e2e8f0;">
         <?php include("cabecario.php"); ?>
 
         <section class="main">
@@ -47,9 +67,7 @@ include("conexao.php");
 
             <div class="gerenciar-user">
                 <div class="criar-user">
-                    
                     <h3>Criar Novo Usuário</h3>
-
                     <form action="form-setting-users.php" method="post">
                         <!-- Exibe a mensagem de sucesso ao criar um novo usuário -->
                         <?php if(isset($_SESSION['error_message'])): ?>
@@ -152,10 +170,110 @@ include("conexao.php");
                         </div>
                         <hr>
                     </form>
+                </div>
 
+                <div class="gerenciar-cargo">
+                    <form action="form-setting-users.php" method="post">
+                        <h3>Alterar Cargo</h3>
+                        <?php
+                            // Consulta para obter os cargos da tabela 'cargo'
+                            $sql = "SELECT codusuario, nome_usuario FROM usuario";
+                            $resultado = $conexao->query($sql);
+
+                            // Verifique se há registros retornados
+                            if ($resultado->num_rows > 0) {
+                                echo '<label for="cargo" class="form-label">Usuário:</label>';
+                                echo '<select class="form-select" name="codusuario" aria-label="Default select example" id="select-usuario">';
+                                echo '<option selected>Selecione um usuário:</option>';
+
+                                // Itere sobre os registros e crie as opções no select
+                                while ($row = $resultado->fetch_assoc()) {
+                                    $codusuario = $row["codusuario"];
+                                    $nomeusuario = $row["nome_usuario"];
+                                    echo "<option value='$codusuario'>$nomeusuario</option>";
+                                }
+
+                                echo '</select>';
+                            }
+                        ?>
+                        <input type="hidden" name="codusuario" id="codusuario" value="">
+
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input type="text" name="nome-cargo" class="form-control" id="nome-cargo" placeholder="Maria" disabled>
+
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email-cargo" class="form-control" id="email-cargo" placeholder="exemplo@gmail.com" disabled>
+                                
+                        <label for="cargo-atual" class="form-label">Cargo que este usuário possui:</label>
+                        <input type="text" name="cargo-atual" class="form-control" id="cargo-atual" disabled>
+
+                        <?php
+                            // Consulta para obter os cargos da tabela 'cargo'
+                            $sql = "SELECT codcargo, nomecargo FROM cargo";
+                            $resultado = $conexao->query($sql);
+
+                            // Verifique se há registros retornados
+                            if ($resultado->num_rows > 0) {
+                                echo '<label for="cargo" class="form-label">Selecione o novo cargo:</label>';
+                                echo '<select class="form-select" name="codcargo" aria-label="Default select example">';
+                                echo '<option selected>Selecionar novo cargo:</option>';
+
+                                // Itere sobre os registros e crie as opções no select
+                                while ($row = $resultado->fetch_assoc()) {
+                                    $codcargo = $row["codcargo"];
+                                    $nomecargo = $row["nomecargo"];
+                                    echo "<option value='$codcargo'>$nomecargo</option>";
+                                }
+
+                                echo '</select>';
+                            }
+                        ?>
+                        <div class="d-grid mx-auto" style="margin-top:20px;">
+                            <button class="btn btn-primary" name="alterar-cargo" type="submit">Alterar Cargo</button>
+                        </div> 
+                        <hr>
+                    </form>
+                    
+
+                    <div class="info-cargo">
+                        <h3>Informações sobre alteração de cargo</h3>
+                        
+                        <div class="text-info">
+                            <legend>Nome/Email</legend>
+                            <p>Mostramos o email e o nome do usuário para que possa ter certeza de que é este usuário que deseja alterar o cargo</p>
+                            
+                            <legend>Cargo Atual</legend>
+                            <p>Deixamos a amostra para que possa ver o cargo atual do usuário selecionado</p>
+                                
+                            <legend>Novo Cargo</legend>
+                            <p>Basta selecionar o cargo desejado entre as opções disponíveis e clicar no botão alterar cargo que ira alterar o cargo do usuário selecionado.</p>
+                        </div>
+                    
+                    </div>
+                
                 </div>
             </div>
         </section>
+
+        <script>
+document.getElementById('select-usuario').addEventListener('change', function() {
+    var selectedUserId = this.value; // ID do usuário selecionado
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'buscar-usuario.php?codusuario=' + selectedUserId, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            // Atualize os campos do formulário com as informações do usuário
+            document.getElementById('nome-cargo').value = response.nome_usuario;
+            document.getElementById('email-cargo').value = response.email;
+            document.getElementById('cargo-atual').value = response.nomecargo;
+            document.getElementById('codusuario').value = response.codusuario; 
+        }
+    };
+    xhr.send();
+});
+
+        </script>
 
         <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     </body>

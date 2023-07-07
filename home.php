@@ -37,7 +37,7 @@ include("conexao.php");
     <link rel="icon" href="assets/img/fiveicon.png" type="image/png">
     <title>Somos Dev's</title>
 </head>
-<body style="background-color: #e4e3e3;">
+<body style="background-color: #e2e8f0;">
     <?php
         include("cabecario.php");
     ?>
@@ -47,6 +47,26 @@ include("conexao.php");
             <h1>Gestão De Negócios</h1>
             <p>Sistema voltado para empreendedores, visando o maior controle da sua empresa.</p>
         </div>
+
+        <!-- Exibe a mensagem de error -->
+        <?php if(isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger" style="text-aling:center;">
+                <?php 
+                    echo $_SESSION['error_message']; 
+                    unset($_SESSION['error_message']); 
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Exibe a mensagem de sucesso -->
+        <?php if(isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success" style="text-aling:center;">
+                <?php 
+                    echo $_SESSION['success_message']; 
+                    unset($_SESSION['success_message']); 
+                ?>
+            </div>
+        <?php endif; ?>
 
         <div class="accordions">
             

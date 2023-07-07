@@ -40,12 +40,19 @@ include("conexao.php");
             </li>
 
             <li>
-                <a href="#" class="sidebar-link">
+                <a href="produtos.php" class="sidebar-link">
                     <i class="bi bi-archive"></i>
-                    <span class="sidebar-text">Files</span>
+                    <span class="sidebar-text">Produtos</span>
                 </a>
             </li>
 
+            <li>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span class="sidebar-text">Fornecedores</span>
+                </a>
+            </li>
+            
             <li>
                 <a href="#" class="sidebar-link">
                     <i class="bi bi-cart"></i>
@@ -110,7 +117,7 @@ include("conexao.php");
             ?>
             <p class="profissao-user"><?php echo $nomeCargo; ?></p>
         </div>
-        <form action="#" method="post">
+        <form action="logout" method="post">
             <button type="submit" id="logout"><i class="bi bi-box-arrow-right"></i></button>
         </form>
     </div>
