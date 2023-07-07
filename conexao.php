@@ -13,8 +13,4 @@ if ($conexao->connect_error) {
     die("Falha na conexão: " . $conexao->connect_error);
 }
 
-// Executa consultas ou operações no banco de dados...
-
-// Fecha a conexão com o banco de dados
-$conexao->close();
 ?>

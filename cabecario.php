@@ -1,3 +1,7 @@
+<?php
+include("conexao.php"); 
+?>
+
 <link rel="stylesheet" href="assets/css/cabecario.css">
 <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -37,13 +41,6 @@
 
             <li>
                 <a href="#" class="sidebar-link">
-                    <i class="bi bi-pie-chart"></i>
-                    <span class="sidebar-text">Analytics</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" class="sidebar-link">
                     <i class="bi bi-archive"></i>
                     <span class="sidebar-text">Files</span>
                 </a>
@@ -53,6 +50,13 @@
                 <a href="#" class="sidebar-link">
                     <i class="bi bi-cart"></i>
                     <span class="sidebar-text">Order</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="setting-users.php" class="sidebar-link">
+                    <i class="bi bi-person-gear"></i>
+                    <span class="sidebar-text">Setting Users</span>
                 </a>
             </li>
 
@@ -69,19 +73,48 @@
     </nav>
 
     <div class="setting-user">
+        <?php
+            // Consulta para obter as informações do usuário
+            $userId = $_SESSION['codusuario']; // Supondo que você tenha a ID do usuário armazenada na sessão
+            $sql = "SELECT u.nome_usuario, c.nomecargo, u.foto_perfil FROM usuario u
+                    INNER JOIN cargo c ON u.codcargo = c.codcargo
+                    WHERE u.codusuario = ?";
+            $stmt = $conexao->prepare($sql);
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $stmt->bind_result($nomeUsuario, $nomeCargo, $fotoPerfil);
+            $stmt->fetch();
+            $stmt->close();
+        ?>
+
+
         <div class="user-profile">
-            <img src="assets/img/foto-my.jpg" alt="" class="image-user">
+            <img src="<?php echo $fotoPerfil; ?>" alt="" class="image-user">
         </div>
         <div class="user-details">
-            <p class="name-user">Gabriel Pereira</p>
-            <p class="profissao-user">Full Staker</p>
+            <?php
+            // Separa o nome completo em partes
+            $partesNome = explode(" ", $nomeUsuario);
+            
+            // Obtém o primeiro nome
+            $primeiroNome = $partesNome[0];
+            
+            // Obtém o último nome
+            $ultimoNome = end($partesNome);
+            
+            // Formata o último nome com apenas a primeira letra
+            $ultimoNomeFormatado = substr($ultimoNome, 0, 1) . ".";
+            
+            // Imprime o primeiro nome e o último nome formatado
+            echo '<p class="name-user">' . $primeiroNome . ' ' . $ultimoNomeFormatado . '</p>';
+            ?>
+            <p class="profissao-user"><?php echo $nomeCargo; ?></p>
         </div>
-
         <form action="#" method="post">
             <button type="submit" id="logout"><i class="bi bi-box-arrow-right"></i></button>
         </form>
-        
     </div>
+
 </header>
 
 <script>
