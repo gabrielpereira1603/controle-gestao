@@ -187,8 +187,74 @@ require_once 'vendor/autoload.php';
                 </div>
             </form>
 
+            
+            <form action="form-produtos.php" method="post">
+                <div class="row">
+                    <h4>Cadastro De Fornecedores:</h4>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="nome_fornecedor" class="form-label">Nome do Fornecedor:</label>
+                            <input type="text" name="nome_fornecedor" class="form-control" id="nome_fornecedor">
+                        </div>
+                    </div>
 
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="telefone_fornecedor" class="form-label">Telefone do Fornecedor:</label>
+                            <input type="number" name="telefone_fornecedor" class="form-control" id="telefone_fornecedor">
+                        </div>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="rua_fornecedor" class="form-label">Rua do Fornecedor:</label>
+                            <input type="text" name="rua_fornecedor" class="form-control" id="rua_fornecedor">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="bairro_fornecedor" class="form-label">Bairro do Fornecedor:</label>
+                            <input type="text" name="bairro_fornecedor" class="form-control" id="bairro_fornecedor">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="numero_fornecedor" class="form-label">Numero do Fornecedor:</label>
+                            <input type="text" name="numero_fornecedor" class="form-control" id="numero_fornecedor">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="cep_fornecedor" class="form-label">CEP do Fornecedor:</label>
+                            <input type="text" name="cep_fornecedor" class="form-control" id="cep_fornecedor">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="cidade_fornecedor" class="form-label">Cidade do Fornecedor:</label>
+                            <input type="text" name="cidade_fornecedor" class="form-control" id="cidade_fornecedor">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="d-grid mx-auto" style="margin-top:32px;">
+                                <button class="btn btn-primary" name="cadastrar-fornecedor" type="submit">Cadastrar Fornecedor</button>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </form>
         </section>
 
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -278,71 +344,3 @@ require_once 'vendor/autoload.php';
         <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
-
-<form action="form-produtos.php" method="post">
-                <div class="row">
-                    <h4>Cadastro De Fornecedores:</h4>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="nome_fornecedor" class="form-label">Nome do Fornecedor:</label>
-                            <input type="text" name="nome_fornecedor" class="form-control" id="nome_fornecedor">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="telefone_fornecedor" class="form-label">Telefone do Fornecedor:</label>
-                            <input type="number" name="telefone_fornecedor" class="form-control" id="telefone_fornecedor">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="rua_fornecedor" class="form-label">Rua do Fornecedor:</label>
-                            <input type="text" name="rua_fornecedor" class="form-control" id="rua_fornecedor">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="bairro_fornecedor" class="form-label">Bairro do Fornecedor:</label>
-                            <input type="text" name="bairro_fornecedor" class="form-control" id="bairro_fornecedor">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="numero_fornecedor" class="form-label">Numero do Fornecedor:</label>
-                            <input type="text" name="numero_fornecedor" class="form-control" id="numero_fornecedor">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cep_fornecedor" class="form-label">CEP do Fornecedor:</label>
-                            <input type="text" name="cep_fornecedor" class="form-control" id="cep_fornecedor">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cidade_fornecedor" class="form-label">Cidade do Fornecedor:</label>
-                            <input type="text" name="cidade_fornecedor" class="form-control" id="cidade_fornecedor">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <div class="d-grid mx-auto" style="margin-top:32px;">
-                                <button class="btn btn-primary" name="cadastrar-fornecedor" type="submit">Cadastrar Fornecedor</button>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-            </form>
