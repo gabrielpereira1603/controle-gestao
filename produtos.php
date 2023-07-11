@@ -27,6 +27,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 $_SESSION['last_activity'] = time();
 
 include("conexao.php");
+require_once 'vendor/autoload.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,9 +105,20 @@ include("conexao.php");
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="marca_produto" class="form-label">Marca Do Produto:</label>
-                            <input type="text" name="marca_produto" class="form-control" id="marca_produto">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="marca_produto" class="form-label">Marca Do Produto:</label>
+                                    <input type="text" name="marca_produto" class="form-control" id="marca_produto">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="codigo_barras" class="form-label">Código de Barras:</label>
+                                    <input type="text" name="codigo_barras" class="form-control" id="codigo_barras">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -145,6 +157,7 @@ include("conexao.php");
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
@@ -153,6 +166,8 @@ include("conexao.php");
                                     <label for="margem-lucro" class="form-label">Margem de Lucro:</label>
                                     <input type="number" name="margem-lucro" class="form-control" id="margem-lucro" step="0.01" min="0" max="99999.99" placeholder="0.00" readonly>
                                 </div>
+                                <canvas id="barcode"></canvas>
+                                <input type="hidden" name="codigo_barras_image" id="codigo_barras_image" value="">
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -170,10 +185,101 @@ include("conexao.php");
                         </div>
                     </div>
                 </div>
-
-
             </form>
-            <form action="form-produtos.php" method="post">
+
+
+
+        </section>
+
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="JsBarcode-master/dist/JsBarcode.all.js"></script>
+        <script>
+            // Gerar o código de barras e preencher o campo
+            function gerarCodigoBarras() {
+                var codigoBarras = Math.floor(Math.random() * 9000000000000) + 1000000000000; // Gera um código de barras aleatório de 13 dígitos
+                document.getElementById('codigo_barras').value = codigoBarras;
+
+                // Usar a biblioteca JsBarcode para gerar o código de barras no elemento canvas
+                JsBarcode("#barcode", codigoBarras);
+
+                // Capturar a imagem do código de barras usando html2canvas
+                html2canvas(document.querySelector("#barcode")).then(function(canvas) {
+                    var imgData = canvas.toDataURL("image/png");
+                    document.getElementById('codigo_barras_image').value = imgData;
+                });
+            }
+
+            // Chamar a função para gerar o código de barras e a imagem ao carregar a página
+            gerarCodigoBarras();
+        </script>
+
+        <script>
+            function preencherPrecos() {
+            var nomeProduto = document.getElementById('nome_produto').value;
+            console.log(nomeProduto);
+
+            // Crie um objeto FormData para enviar os dados
+            var formData = new FormData();
+            formData.append('nome_produto', nomeProduto);
+
+            // Realize uma requisição AJAX para buscar os valores de preço de custo e preço de venda com base no nome do produto
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'buscar_precos.php', true); // Defina o arquivo PHP responsável por buscar os preços
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.success) {
+                    // Suponha que você recebeu os valores de preço de custo e preço de venda nas variáveis precoCusto e precoVenda
+                    var precoCusto = response.preco_custo;
+                    var precoVenda = response.preco_venda;
+
+                    // Preencha os campos de preço de custo e preço de venda
+                    document.getElementById('preco_custo').value = precoCusto;
+                    document.getElementById('preco_venda').value = precoVenda;
+                    // Chame a função calcularMargemLucro() para calcular e preencher a margem de lucro
+                    calcularMargemLucro();
+                } else {
+                    // Exiba uma mensagem informando que os preços não foram encontrados
+                    console.log('Os preços não foram encontrados');
+                }
+                }
+            };
+
+            // Envie os dados do produto para o arquivo PHP
+            xhr.send(formData);
+            }
+
+        </script>
+
+        <script>
+            // Obtém os elementos dos campos de preço de custo, preço de venda e margem de lucro
+            var precoCustoInput = document.getElementById('preco_custo');
+            var precoVendaInput = document.getElementById('preco_venda');
+            var margemLucroInput = document.getElementById('margem-lucro');
+
+            // Adiciona um evento de input nos campos de preço de custo e preço de venda
+            precoCustoInput.addEventListener('input', calcularMargemLucro);
+            precoVendaInput.addEventListener('input', calcularMargemLucro);
+
+            // Função para calcular e preencher o valor da margem de lucro
+            function calcularMargemLucro() {
+                var precoCusto = parseFloat(precoCustoInput.value);
+                var precoVenda = parseFloat(precoVendaInput.value);
+
+                if (!isNaN(precoCusto) && !isNaN(precoVenda)) {
+                    var margemLucro = precoVenda - precoCusto;
+                    margemLucroInput.value = margemLucro.toFixed(2);
+                }
+            }
+        </script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
+
+<form action="form-produtos.php" method="post">
                 <div class="row">
                     <h4>Cadastro De Fornecedores:</h4>
                     <div class="col-md-6">
@@ -240,69 +346,3 @@ include("conexao.php");
                     </div>
                 </div>
             </form>
-
-        </section>
-
-        <script>
-function preencherPrecos() {
-  var nomeProduto = document.getElementById('nome_produto').value;
-  console.log(nomeProduto);
-
-  // Crie um objeto FormData para enviar os dados
-  var formData = new FormData();
-  formData.append('nome_produto', nomeProduto);
-
-  // Realize uma requisição AJAX para buscar os valores de preço de custo e preço de venda com base no nome do produto
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'buscar_precos.php', true); // Defina o arquivo PHP responsável por buscar os preços
-
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log(xhr.responseText);
-      var response = JSON.parse(xhr.responseText);
-
-      if (response.success) {
-        // Suponha que você recebeu os valores de preço de custo e preço de venda nas variáveis precoCusto e precoVenda
-        var precoCusto = response.preco_custo;
-        var precoVenda = response.preco_venda;
-
-        // Preencha os campos de preço de custo e preço de venda
-        document.getElementById('preco_custo').value = precoCusto;
-        document.getElementById('preco_venda').value = precoVenda;
-      } else {
-        // Exiba uma mensagem informando que os preços não foram encontrados
-        console.log('Os preços não foram encontrados');
-      }
-    }
-  };
-
-  // Envie os dados do produto para o arquivo PHP
-  xhr.send(formData);
-}
-
-        </script>
-
-        <script>
-            // Obtém os elementos dos campos de preço de custo, preço de venda e margem de lucro
-            var precoCustoInput = document.getElementById('preco_custo');
-            var precoVendaInput = document.getElementById('preco_venda');
-            var margemLucroInput = document.getElementById('margem-lucro');
-
-            // Adiciona um evento de input nos campos de preço de custo e preço de venda
-            precoCustoInput.addEventListener('input', calcularMargemLucro);
-            precoVendaInput.addEventListener('input', calcularMargemLucro);
-
-            // Função para calcular e preencher o valor da margem de lucro
-            function calcularMargemLucro() {
-                var precoCusto = parseFloat(precoCustoInput.value);
-                var precoVenda = parseFloat(precoVendaInput.value);
-
-                if (!isNaN(precoCusto) && !isNaN(precoVenda)) {
-                    var margemLucro = precoVenda - precoCusto;
-                    margemLucroInput.value = margemLucro.toFixed(2);
-                }
-            }
-        </script>
-        <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>

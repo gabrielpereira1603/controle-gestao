@@ -33,6 +33,35 @@ include("conexao.php");
             </li>
 
             <li>
+                <a href="ver-produtos.php" class="sidebar-link">
+                    <i class="bi bi-eye"></i>
+                    <span class="sidebar-text">Ver Produtos</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="produtos.php" class="sidebar-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span class="sidebar-text">Produtos</span>
+                </a>
+            </li>
+<!-- 
+            <li>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-archive"></i>
+                    <span class="sidebar-text">Fornecedores</span>
+                </a>
+            </li> -->
+            
+            <li>
+                <a href="venda-produto.php" class="sidebar-link">
+                    <i class="bi bi-cart"></i>
+                    <span class="sidebar-text">Order</span>
+                </a>
+            </li>
+            
+            <li>
                 <a href="meu-perfil.php" class="sidebar-link">
                     <i class="bi bi-person-circle"></i>
                     <span class="sidebar-text">My profile</span>
@@ -40,40 +69,11 @@ include("conexao.php");
             </li>
 
             <li>
-                <a href="produtos.php" class="sidebar-link">
-                    <i class="bi bi-archive"></i>
-                    <span class="sidebar-text">Produtos</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" class="sidebar-link">
-                    <i class="bi bi-box-seam"></i>
-                    <span class="sidebar-text">Fornecedores</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="#" class="sidebar-link">
-                    <i class="bi bi-cart"></i>
-                    <span class="sidebar-text">Order</span>
-                </a>
-            </li>
-            
-            <li>
                 <a href="setting-users.php" class="sidebar-link">
                     <i class="bi bi-person-gear"></i>
                     <span class="sidebar-text">Setting Users</span>
                 </a>
             </li>
-
-            <li>
-                <a href="#" class="sidebar-link">
-                    <i class="bi bi-gear"></i>
-                    <span class="sidebar-text">Setting</span>
-                </a>
-            </li>
-
             
             
         </ul>

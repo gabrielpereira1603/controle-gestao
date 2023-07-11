@@ -80,7 +80,8 @@ include("conexao.php");
 
                     <div class="info-perfil">
                         <p><strong>Nome: </strong><?php echo $nomeUsuario; ?></p>
-                        <p><strong>Data de Nascimento: </strong><?php echo date('d/m/Y', strtotime($dataNascimento)); ?></p>                        <p><strong>Telefone: </strong><?php echo $telefone; ?></p>
+                        <p><strong>Data de Nascimento: </strong><?php echo date('d/m/Y', strtotime($dataNascimento)); ?></p>                       
+                        <p><strong>Telefone: </strong><?php echo $telefone; ?></p>
                         <p><strong>Login: </strong><?php echo $login; ?></p>
                         <p><strong>Email: </strong><?php echo $email; ?></p>
                         <p><strong>Cargo: </strong><?php echo $nomeCargo; ?></p>

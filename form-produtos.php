@@ -83,6 +83,8 @@ if (isset($_POST['cadastrar-produto'])) {
     $nomeMarca = strtoupper($_POST["marca_produto"]);
     $codFornecedor = $_POST["fornecedor_produto"];
     $quantidade = $_POST["quantidade"];
+    $codigoBarras = $_POST['codigo_barras'];
+    $codigoBarrasImage = $_POST['codigo_barras_image']; // Imagem do código de barras em base64
 
     // Cálculo da margem de lucro
     $margemLucro = ($precoVenda - $precoCusto);
@@ -113,22 +115,26 @@ if (isset($_POST['cadastrar-produto'])) {
         $stmt->close();
 
         if ($conexao->affected_rows > 0) {
-            $_SESSION['success_message'] = 'Quantidade do produto atualizada com sucesso!';
-        } else {
             $_SESSION['error_message'] = 'Erro ao atualizar a quantidade do produto.';
+        } else {
+            $_SESSION['success_message'] = 'Quantidade do produto atualizada com sucesso!';
         }
     } else {
         // O produto não existe, insere um novo produto
-        $sql = "INSERT INTO produto (nome_produto, preco_venda, preco_custo, margem_lucro, codtipo, codmarca, codfornecedor, quantidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO produto (nome_produto, preco_venda, preco_custo, margem_lucro, codtipo, codmarca, codfornecedor, quantidade, codigo_barras, imagem_codigo_barras) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("ssssiidi", $nomeProduto, $precoVenda, $precoCusto, $margemLucro, $codTipo, $codMarca, $codFornecedor, $quantidade);
+        $stmt->bind_param("ssssiiidss", $nomeProduto, $precoVenda, $precoCusto, $margemLucro, $codTipo, $codMarca, $codFornecedor, $quantidade, $codigoBarras, $codigoBarrasImage);
         $stmt->execute();
         $stmt->close();
-
+        
         if ($conexao->affected_rows > 0) {
             $_SESSION['error_message'] = 'Erro ao cadastrar o produto.';
         } else {
             $_SESSION['success_message'] = 'Produto cadastrado com sucesso!';
+            // Salva a imagem do código de barras em um diretório
+            $caminhoImagem = 'fotos-cod-barras/' . $codigoBarras . '.png'; // Caminho onde você deseja salvar a imagem
+            $imagemCodBarras = base64_decode(str_replace('data:image/png;base64,', '', $codigoBarrasImage));
+            file_put_contents($caminhoImagem, $imagemCodBarras);
         }
     }
 
@@ -136,3 +142,5 @@ if (isset($_POST['cadastrar-produto'])) {
     header('Location: produtos.php');
     exit;
 }
+
+?>
